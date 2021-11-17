@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ShowIn="navigation_view">
+
+    <item
+        android:id="@+id/Perfil"
+        android:icon="@drawable/account_icon"
+        android:title="Mi Cuenta"/>
+    <item
+        android:id="@+id/configuracion"
+        android:icon="@drawable/setting"
+        android:title="Configuracion"
+        />
+    <item
+        android:id="@+id/editarperfil"
+        android:icon="@drawable/senting_acound"
+        android:title="Editar Perfil"/>
+    <item
+        android:id="@+id/infoapp"
+        android:icon="@drawable/info"
+        android:title="Acerca De SportsBuy"
+        />
+    <item
+        android:id="@+id/salir"
+        android:icon="@drawable/logout"
+        android:title="Salir"
+        />
+
+</menu>
