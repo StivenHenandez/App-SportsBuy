@@ -36,7 +36,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="username"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/MA_tv_correo"
