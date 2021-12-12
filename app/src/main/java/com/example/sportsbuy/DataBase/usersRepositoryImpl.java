@@ -12,8 +12,16 @@ public class usersRepositoryImpl implements usersRepository{
 
     @Override
     public List<usersEntity> buscarPorCorreo(String correo) {
-        return dao.buscarUsuarioPorCorreo(correo);
+
+        List<usersEntity> BuscarPorCcorreo = dao.buscarUsuarioPorCorreo(correo);
+
+        return BuscarPorCcorreo;
     }
+
+    //@Override
+    //public List<usersEntity> obtenerTodosLosValores(String correo) {
+        //return null;
+    //}
 
     @Override
     public List<usersEntity> obtenerTodosLosValores() {

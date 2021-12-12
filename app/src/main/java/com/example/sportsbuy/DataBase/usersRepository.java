@@ -5,6 +5,8 @@ import java.util.List;
 public interface usersRepository {
 
     List<usersEntity> buscarPorCorreo(String correo);
+    //List<usersEntity> obtenerTodosLosValores(String correo);
+
     List<usersEntity> obtenerTodosLosValores();
 
     void insertUsers(usersEntity user);

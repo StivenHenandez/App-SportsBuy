@@ -20,8 +20,12 @@ import com.example.sportsbuy.DataBase.usersEntity;
 import com.example.sportsbuy.DataBase.usersRepository;
 import com.example.sportsbuy.DataBase.usersRepositoryImpl;
 import com.example.sportsbuy.Fragmentos.FragTerminosyCondiciones;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +34,7 @@ public class Create_Account extends AppCompatActivity {
     LinearLayout conte;
     Fragment frag;
     CheckBox checkboxFrag;
-    EditText et_cedula,et_nombre,et_apellido,et_correo,et_contraseña,et_telefono;
+    EditText et_cedula, et_nombre, et_apellido, et_correo, et_contraseña, et_telefono;
     Button btn_salvar;
     //TextView verinfo;
 
@@ -38,6 +42,14 @@ public class Create_Account extends AppCompatActivity {
     private usersDAO dao;
     private usersRepository repo;
     private usersEntity user;
+
+    /*
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;*/
+
+    private FirebaseFirestore firestoredb;
+
+    String TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,7 @@ public class Create_Account extends AppCompatActivity {
         dao = db.usersDAO();
         repo = new usersRepositoryImpl(dao);
         user = new usersEntity();
+
 
         btn_salvar = findViewById(R.id.btn_CA_salvar);
 
@@ -64,12 +77,114 @@ public class Create_Account extends AppCompatActivity {
         conte = findViewById(R.id.cont);
         conte.setVisibility(View.INVISIBLE);
 
-        btn_salvar.setVisibility(View.INVISIBLE);
+        btn_salvar.setVisibility(View.VISIBLE);
 
+        /*FireBase
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();*/
+        firestoredb = FirebaseFirestore.getInstance();
     }
 
+    public void crearcuenta2(String nombre) {
+
+    }
     public void btn_CA_crear_cuenta(View view) {
 
+        boolean validacion = this.validar(view);
+
+        if (validacion){
+
+            String Vcorreo = et_correo.getText().toString();
+
+            firestoredb.collection("Users").document(Vcorreo).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    try {
+                        if (documentSnapshot.get("Correo")!= null){
+                            Toast toast = Toast.makeText(view.getContext(), "", Toast.LENGTH_SHORT);
+                            toast.setText("El Correo ya existe");
+                            //toast.setGravity(Gravity.AXIS_SPECIFIED, 100, 1000);
+                            toast.show();
+                            et_correo.setError("Correo invalido");
+                            et_correo.setFocusable(true);
+                        }
+                        else{
+                            Map<String, Object> Usuario = new HashMap<>();
+
+                            Usuario.put("Cedula", et_cedula.getText().toString());
+                            Usuario.put("Nombre", et_nombre.getText().toString());
+                            Usuario.put("Apellido", et_apellido.getText().toString());
+                            Usuario.put("Correo", et_correo.getText().toString());
+                            Usuario.put("Contraseña", et_contraseña.getText().toString());
+                            Usuario.put("Telefono", et_telefono.getText().toString());
+
+                            firestoredb.collection("Users").document(Vcorreo).set(Usuario);
+                            Toast toast = Toast.makeText(view.getContext(), "", Toast.LENGTH_SHORT);
+                            toast.setText("Se creo la informacion");
+                            //toast.setGravity(Gravity.AXIS_SPECIFIED, 100, 1000);
+                            toast.show();
+
+                            limpiar_campos();
+
+                            Login instacia= new Login();
+
+                            Intent activityLogin = new Intent(view.getContext(), Login.class);
+                            startActivity(activityLogin);
+                            finish();
+
+                            Toast inicio= Toast.makeText(view.getContext(),"Inicia Sesion",Toast.LENGTH_SHORT);
+                            //inicio.setText("Inicia Sesion");
+                            //inicio.setGravity(Gravity.AXIS_SPECIFIED,100,1000);
+                            //inicio.show();
+                        }
+                    }catch (Exception  e){
+                        System.out.println("Error3 : "+e.getLocalizedMessage());
+                    }
+                }
+            });
+            //Intent activityLogin = new Intent(this, Login.class);
+            //startActivity(activityLogin);
+            //finish();
+        }else{
+            System.out.println("No se valido");
+        }
+
+
+/*
+        if (validacion == true){
+            if (){
+                try {
+
+
+                    Map<String, Object> Usuario = new HashMap<>();
+
+                    Usuario.put("Cedula", et_cedula.getText().toString());
+                    Usuario.put("Nombre", et_nombre.getText().toString());
+                    Usuario.put("Apellido", et_apellido.getText().toString());
+                    Usuario.put("Correo", et_correo.getText().toString());
+                    Usuario.put("Contraseña", et_contraseña.getText().toString());
+                    Usuario.put("Telefono", et_telefono.getText().toString());
+
+                    firestoredb.collection("Users").document(Vcorreo).set(Usuario);
+
+                    et_cedula.setText("");
+                    et_nombre.setText("");
+                    et_apellido.setText("");
+                    et_correo.setText("");
+                    et_contraseña.setText("");
+                    et_telefono.setText("");
+
+                    Toast.makeText(this, "Registro Correctamente", Toast.LENGTH_SHORT).show();
+
+                }catch (Exception e){
+                    System.out.println("Error : " + e.getLocalizedMessage());
+                    Toast.makeText(this, "No se pudo Registrar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+
+/*
         boolean validacion = this.validar(view);
 
         if (validacion){
@@ -95,12 +210,7 @@ public class Create_Account extends AppCompatActivity {
                 //toast.setGravity(Gravity.AXIS_SPECIFIED,100,1000);
                 toast.show();
 
-                et_cedula.setText("");
-                et_nombre.setText("");
-                et_apellido.setText("");
-                et_correo.setText("");
-                et_contraseña.setText("");
-                et_telefono.setText("");
+
 
                 Intent ActivityLo = new Intent(this, Login.class);
                 startActivity(ActivityLo);
@@ -119,96 +229,173 @@ public class Create_Account extends AppCompatActivity {
             //toast.setGravity(Gravity.AXIS_SPECIFIED,100,1000);
             toast.show();
         }
+*/
+    }
 
-
+    private void limpiar_campos(){
+        et_cedula.setText("");
+        et_nombre.setText("");
+        et_apellido.setText("");
+        et_correo.setText("");
+        et_contraseña.setText("");
+        et_telefono.setText("");
     }
 
     private void guardarinfo() {
 
-            String cedula, nombre, apellido, correo, contraseña, telefono;
 
-            cedula= et_cedula.getText().toString();
-            nombre = et_nombre.getText().toString();
-            apellido = et_apellido.getText().toString();
-            correo = et_correo.getText().toString();
-            contraseña = et_contraseña.getText().toString();
-            telefono = et_telefono.getText().toString();
+        String cedula, nombre, apellido, correo, contraseña, telefono;
 
-            user.setCedula(cedula);
-            user.setNombre(nombre);
-            user.setApellido(apellido);
-            user.setCorreo(correo);
-            user.setClave(contraseña);
-            user.setTelefono(telefono);
-
-            repo.insertUsers(user);
+        cedula= et_cedula.getText().toString();
+        nombre = et_nombre.getText().toString();
+        apellido = et_apellido.getText().toString();
+        correo = et_correo.getText().toString();
+        contraseña = et_contraseña.getText().toString();
+        telefono = et_telefono.getText().toString();
 
 
-/*
-        try {
+        user.setCedula(cedula);
+        user.setNombre(nombre);
+        user.setApellido(apellido);
+        user.setCorreo(correo);
+        user.setClave(contraseña);
+        user.setTelefono(telefono);
 
+        //databaseReference.child("Usuarios").child(cedula).setValue(user);d
+        Toast.makeText(this, "Registro Correctamente", Toast.LENGTH_SHORT).show();
 
-
-            File tarjeta = Environment.getExternalStorageDirectory();
-            File file = new File(tarjeta.getAbsolutePath(),"cuenta1");
-            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file));
-            osw.write(nombre);
-            osw.write(apellido);
-            osw.write(correo);
-            osw.write(contraseña);
-            osw.write(telefono);
-            osw.flush();
-            osw.close();
-
-
-            FileOutputStream fos = openFileOutput("cuenta1.csv", MODE_APPEND);
-
-            fos.write(nombre.getBytes());
-            fos.write(apellido.getBytes());
-            fos.write(correo.getBytes());
-            fos.write(contraseña.getBytes());
-            fos.write(telefono.getBytes());
-            fos.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-             */
     }
 
-
+    //List<usersEntity> listusers = new ArrayList<>();
 
     public void btn_CA_salvar(View view) {
 
-       String Vcorreo = et_correo.getText().toString();
+        String Vcorreo = et_correo.getText().toString();
 
-       List <usersEntity> user = repo.buscarPorCorreo(Vcorreo);
 
-       String cedula, nombre, apellido, correo ,contraseña, telefono;
 
-           for (usersEntity i:user) {
+    firestoredb.collection("Users").document(Vcorreo).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        @Override
+        public void onSuccess(DocumentSnapshot documentSnapshot) {
+            try {
+                et_cedula.setText(documentSnapshot.get("Cedula").toString());
+                et_nombre.setText(documentSnapshot.get("Nombre").toString());
+                et_apellido.setText(documentSnapshot.get("Apellido").toString());
+                et_correo.setText(documentSnapshot.get("Correo").toString());
+                et_contraseña.setText(documentSnapshot.get("Contraseña").toString());
+                et_telefono.setText(documentSnapshot.get("Telefono").toString());
+            }catch (Exception  e){
+                    System.out.println("Error3 : "+e.getLocalizedMessage());
+            }
+        }
+    });
 
-               cedula = i.getCedula();
-               nombre = i.getNombre();
-               apellido = i.getApellido();
-               correo = i.getCorreo();
-               contraseña = i.getClave();
-               telefono = i.getTelefono();
 
-               et_cedula.setText(cedula);
-               et_nombre.setText(nombre);
-               et_apellido.setText(apellido);
-               et_correo.setText(correo);
-               et_contraseña.setText(contraseña);
-               et_telefono.setText(telefono);
-           }
 
+        //String Vcedula = et_cedula.getText().toString();
+
+        //List <usersEntity> usuarios = this.DatosFirebase();
+
+        //if (usuarios != null){
+          //  System.out.println("El tamaño de la lista es"+listusers.size());
+        //}
 
 
 
         /*
+
+        this.DatosFirebase();
+
+        usersEntity usuario = null;
+
+        if(listusers.size()>0){
+            for (usersEntity user:listusers) {
+                if (user.getCedula().equals(Vcedula)){
+                    usuario = user;
+                    break;
+                }
+            }
+        }
+
+        //et_cedula,et_nombre,et_apellido,et_correo,et_contraseña,et_telefono;
+        if (usuario != null){
+            et_cedula.setText(usuario.getCedula());
+            et_nombre.setText(usuario.getNombre());
+            et_apellido.setText(usuario.getApellido());
+            et_correo.setText(usuario.getCorreo());
+            et_contraseña.setText(usuario.getClave());
+            et_telefono.setText(usuario.getTelefono());
+        }else{
+            Toast.makeText(Create_Account.this, "No se Encontro el usuario", Toast.LENGTH_SHORT).show();
+        }
+
+        //List <usersEntity> user = repo.buscarPorCorreo(Vcorreo);
+
+        databaseReference.child("Usuarios").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int h = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    usersEntity persona = dataSnapshot.getValue(usersEntity.class);
+                    h = h+1;
+                }
+
+                usersEntity vector[] = new usersEntity[h];
+                int i = 0;
+                listusers.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    usersEntity usuario = dataSnapshot.getValue(usersEntity.class);
+                    //cedula.setText(persona.cedula);
+
+                    vector[i] = usuario;
+                    listusers.add(vector[i]);
+                    i = i + 1;
+                    System.out.println("En contador va en : "+i);
+                }
+                int vlue = vector.length;
+                System.out.println("tamaño vector : "+vlue);
+                int value = listusers.size();
+                System.out.println("tamaño lista :"+value);
+
+                if (vector[0]!=null) {
+
+                    usersEntity usuario = null;
+
+                    for (usersEntity user:listusers) {
+                        if (user.getCedula().equals(Vcedula)){
+                            usuario = user;
+                            break;
+                        }
+                    }
+
+                    //et_cedula,et_nombre,et_apellido,et_correo,et_contraseña,et_telefono;
+                    if (usuario != null){
+                    et_cedula.setText(usuario.getCedula());
+                    et_nombre.setText(usuario.getNombre());
+                    et_apellido.setText(usuario.getApellido());
+                    et_correo.setText(usuario.getCorreo());
+                    et_contraseña.setText(usuario.getClave());
+                    et_telefono.setText(usuario.getTelefono());
+                    }else{
+                        Toast.makeText(Create_Account.this, "No se Encontro el usuario", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(Create_Account.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
+
+/*
+
+
         String nomarchivo = verinfo.getText().toString();
         File tarjeta = Environment.getExternalStorageDirectory();
         File file = new File(tarjeta.getAbsolutePath(), nomarchivo);
@@ -226,23 +413,17 @@ public class Create_Account extends AppCompatActivity {
             br.close();
             archivo.close();
             verinfo.setText(todo);
-
         } catch (IOException e)
         {
         }
-
         FileInputStream fi = null;
         try {
              fi = openFileInput("cuenta1.csv");
             InputStreamReader inp=new InputStreamReader(fi);
             BufferedReader buffer=new BufferedReader(inp);
-
             StringBuilder strb=new StringBuilder();
-
             String linea=null;
-
             while ((linea=buffer.readLine())!= null){
-
                 strb.append(linea);
             }
             inp.close();
@@ -253,11 +434,55 @@ public class Create_Account extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
          */
     }
 
 
+/*
+    public List<usersEntity> DatosFirebase(){
+
+        List<usersEntity> datos = new ArrayList<>();
+
+        databaseReference.child("Usuarios").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int h = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    usersEntity persona = dataSnapshot.getValue(usersEntity.class);
+                    h = h+1;
+                }
+
+                usersEntity vector[] = new usersEntity[h];
+                int i = 0;
+                listusers.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    usersEntity usuario = dataSnapshot.getValue(usersEntity.class);
+                    //cedula.setText(persona.cedula);
+
+                    vector[i] = usuario;
+                    datos.add(vector[i]);
+                    i = i + 1;
+                    System.out.println("En contador va en : "+i);
+                    System.out.println("Tamaño lista : "+datos.size());
+                    //System.out.println(""+vector[0]);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        System.out.println("Tamaño lista 2 : "+datos.size());
+        if (datos.size()>0){
+            System.out.println("retorno Lista");
+            return datos;
+        }
+        else {
+            return null;
+        }
+    }*/
 
     public boolean validar(View view){
         String cedula, nombre, apellido, correo, contraseña, telefono;
@@ -350,6 +575,7 @@ public class Create_Account extends AppCompatActivity {
                                             //toast.setGravity(Gravity.AXIS_SPECIFIED, 100, 1000);
                                             toast.show();
                                             conte.setVisibility(View.VISIBLE);
+                                            return false;
                                         }else{
                                             return true;
                                         }

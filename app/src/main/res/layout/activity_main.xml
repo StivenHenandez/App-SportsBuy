@@ -9,7 +9,8 @@
     tools:openDrawer="start"
     tools:context=".MainActivity">
 
-    <include layout="@layout/content_activity_main"/>
+
+    <include layout="@layout/content_activity_main" />
 
 
     <com.google.android.material.navigation.NavigationView
@@ -21,6 +22,5 @@
         app:menu="@menu/nav_menu"
         app:itemTextColor="@color/black"
         />
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
