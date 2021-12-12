@@ -30,11 +30,6 @@
             android:text="@string/tv_title_create_login"
             android:textSize="18dp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -101,6 +96,11 @@
                 android:inputType="phone" />
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
 
         <TableLayout
             android:layout_width="match_parent"

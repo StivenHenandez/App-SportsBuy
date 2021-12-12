@@ -1,31 +1,31 @@
 <resources>
     <string name="app_name">SportsBuy</string>
     <string name="tv_title_create_login">Create Accound</string>
-    <string name="tv_title_login">Login</string>
-    <string name="et_usuario">Email</string>
-    <string name="et_contraseña">Password</string>
-    <string name="btn_acceder">Access</string>
-    <string name="tv_olvideContarseña">Forgot The Password</string>
-    <string name="tv_crearCuenta">Create Account</string>
+    <string name="tv_title_login">Ingresar</string>
+    <string name="et_usuario">Correo</string>
+    <string name="et_contraseña">Contraseña</string>
+    <string name="btn_acceder">Acceder</string>
+    <string name="tv_olvideContarseña">Olvide Contraseña</string>
+    <string name="tv_crearCuenta">Crear Cuenta</string>
 
-    <string name="et_CA_nombre">Name</string>
-    <string name="et_CA_apellido">LastName</string>
-    <string name="et_CA_correo">Email|@example.com</string>
-    <string name="et_CA_contraseña">Password</string>
-    <string name="et_CA_telefono">Phone</string>
-    <string name="btn_CA_crearCuenta">Create Account</string>
+    <string name="et_CA_nombre">Nombre</string>
+    <string name="et_CA_apellido">Apellido</string>
+    <string name="et_CA_correo">Correo|@example.com</string>
+    <string name="et_CA_contraseña">Contraseña</string>
+    <string name="et_CA_telefono">Telefono</string>
+    <string name="btn_CA_crearCuenta">Crear Cuenta</string>
 
     <string name="CV">AaBbCcDdEeFfGgHhIiJjKkLlMmNnÑñOoPpQqRrSsTtUuVvWwXxYyZz</string>
-    <string name="et_CA_cedula">Identification card</string>
+    <string name="et_CA_cedula">Cedula</string>
     <string name="CVCedula">1234567890</string>
 
-    <string name="tv_CA_TengoCuenta">I have an account</string>
+    <string name="tv_CA_TengoCuenta">Ya tengo Una Cuenta</string>
 
     <string name="CVcontraseña">! " # $ % &amp; ' * +, -. / 0 1 2 3 4 5 6 7 8 9 :;= ? @ A B C D E F
         G H I J K L M N O P Q R S T U V W X Y Z \ ^ _ ` a b c d e f g h i j k l m n o p q r s t
         u v w x y z | ~</string>
 
-    <string name="tv_TyC">Usage Policies</string>
+    <string name="tv_TyC">Politicas de Uso</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="TyC_frag">El acceso a este sistema y la utilización de la clave autorizada, con llevan la aceptación del
 usuario a todas las estipulaciones de este documento y las condiciones aplicables. Este
@@ -91,10 +91,8 @@ aceptación del usuario a todas las estipulaciones de este acuerdo.
 \n11. Política de manejo de la privacidad del usuario - Para conocer la política del tratamiento de
 datos personales de OBGYN SAS, haga click aquí</string>
 
-    <string name="accept">Accept</string>
+    <string name="accept">Aceptar</string>
     <string name="apertura">Apertura</string>
     <string name="cierre">Cierre</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

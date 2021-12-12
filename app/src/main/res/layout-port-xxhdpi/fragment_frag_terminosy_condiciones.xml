@@ -21,14 +21,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/TyC_frag"
-                android:textColor="#546E7A" />
+                android:textColor="#546E7A"
+                android:textSize="18sp" />
 
             <CheckBox
                 android:id="@+id/checkboxfrag"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="checkbox"
-                android:text="@string/accept" />
+                android:text="@string/accept"
+                android:textSize="24sp" />
         </LinearLayout>
 
     </ScrollView>
